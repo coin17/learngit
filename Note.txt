@@ -33,3 +33,24 @@ $ git checkout -- readme.txt
 8、撤销暂存区内容，撤销工作区修改
 $ git reset HEAD readme.txt
 $ git checkout -- readme.txt
+
+9、本地删除文件后，删除版本库
+$ git rm test.txt
+$ git commit -m "remove test.txt"
+
+10、本地删除文件后，从版本库同步，撤销删除
+$ git checkout -- test.txt
+
+11、创建 SSH Key
+$ ssh-keygen -t rsa -C "youremail@example.com"
+
+12、登陆GitHub，打开“Account settings”，“SSH Keys”页面，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容，点“Add Key”
+
+13、登陆GitHub，然后，在右上角找到“Create a new repo”按钮，创建一个新的仓库，在Repository name填入learngit，其他保持默认设置，点击“Create repository”按钮，就成功地创建了一个新的Git仓库
+
+14、把本地仓库的内容推送到GitHub仓库
+$ git remote add origin git@github.com:coin17/learngit.git
+$ git push -u origin master
+
+15、本地提交后推送远程库最新修改
+$ git push origin master
