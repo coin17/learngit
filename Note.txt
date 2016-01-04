@@ -3,8 +3,12 @@
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"
 
-2、初始化
+2、初始化及提交
 $ git init
 
 $ git add readme.txt
 $ git commit -m "wrote a readme file"
+
+3、查看工作区状态及查看修改
+$ git status
+$ git diff
