@@ -114,3 +114,58 @@ $ git branch
 合并某分支到当前分支：git merge <name>
 
 删除分支：git branch -d <name>
+
+24、解决冲突
+
+准备新的feature1分支，继续我们的新分支开发：
+
+$ git checkout -b feature1
+
+修改readme.txt最后一行，改为：
+
+Creating a new branch is quick AND simple.
+
+在feature1分支上提交：
+
+$ git add readme.txt 
+$ git commit -m "AND simple"
+
+切换到master分支：
+
+$ git checkout master
+
+在master分支上把readme.txt文件的最后一行改为：
+
+Creating a new branch is quick & simple.
+
+提交：
+
+$ git add readme.txt 
+$ git commit -m "& simple"
+
+这种情况下，Git无法执行“快速合并”，只能试图把各自的修改合并起来，但这种合并就可能会有冲突，我们试试看：
+
+$ git merge feature1
+
+直接查看readme.txt的内容：
+<<<<<<< HEAD
+Creating a new branch is quick & simple.
+=======
+Creating a new branch is quick AND simple.
+>>>>>>> feature1
+
+Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容，我们修改如下后保存：
+
+Creating a new branch is quick and simple.
+再提交：
+
+$ git add readme.txt 
+$ git commit -m "conflict fixed"
+
+用带参数的git log也可以看到分支的合并情况：
+
+$ git log --graph --pretty=oneline --abbrev-commit
+
+删除feature1分支：
+
+$ git branch -d feature1
