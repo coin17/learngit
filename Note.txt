@@ -198,3 +198,12 @@ $ git merge --no-ff -m "merge with no-ff" dev
 合并后，用git log看看分支历史：
 
 $ git log --graph --pretty=oneline --abbrev-commit
+
+26、“储藏”与恢复当前工作现场
+$ git stash
+
+$ git stash pop
+
+$ git stash list
+
+$ git stash apply stash@{0}
