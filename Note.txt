@@ -4,19 +4,23 @@ $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"
 
 2、初始化及提交
+
 $ git init
 $ git add readme.txt
 $ git commit -m "wrote a readme file"
 
 3、查看工作区状态及查看修改
+
 $ git status
 $ git diff
 
 4、查看提交日志
+
 $ git log
 $ git log --pretty=oneline
 
 5、版本回退、查看所有记录
+
 $ git reset --hard HEAD^
 $ cat readme.txt
 
@@ -25,23 +29,29 @@ $ git reset --hard 313128eead7
 $ git reflog
 
 6、比较工作区和版本库里面最新版本差异
+
 $ git diff HEAD -- readme.txt
 
 7、撤销工作区修改
+
 $ git checkout -- readme.txt
 
 8、撤销暂存区内容，撤销工作区修改
+
 $ git reset HEAD readme.txt
 $ git checkout -- readme.txt
 
 9、本地删除文件后，删除版本库
+
 $ git rm test.txt
 $ git commit -m "remove test.txt"
 
 10、本地删除文件后，从版本库同步，撤销删除
+
 $ git checkout -- test.txt
 
 11、创建 SSH Key
+
 $ ssh-keygen -t rsa -C "youremail@example.com"
 
 12、登陆GitHub，打开“Account settings”，“SSH Keys”页面，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容，点“Add Key”
@@ -49,10 +59,12 @@ $ ssh-keygen -t rsa -C "youremail@example.com"
 13、登陆GitHub，然后，在右上角找到“Create a new repo”按钮，创建一个新的仓库，在Repository name填入learngit，其他保持默认设置，点击“Create repository”按钮，就成功地创建了一个新的Git仓库
 
 14、把本地仓库的内容推送到GitHub仓库
+
 $ git remote add origin git@github.com:coin17/learngit.git
 $ git push -u origin master
 
 15、本地提交后推送远程库最新修改
+
 $ git push origin master
 
 16、服务器克隆本地
@@ -61,6 +73,7 @@ $ git push origin master
 $ git clone git@github.com:coin17/gitskills.git
 
 17、创建dev分支，切换到dev分支
+
 $ git checkout -b dev
 
 git checkout命令加上-b参数表示创建并切换，相当于以下两条命令：
@@ -71,3 +84,33 @@ $ git checkout dev
 18、用git branch命令查看当前分支：
 
 $ git branch
+
+19、dev分支的工作完成，我们就可以切换回master分支：
+
+$ git checkout master
+
+20、把dev分支的工作成果合并到master分支上：
+
+$ git merge dev
+
+21、合并完成后，就可以放心地删除dev分支了：
+
+$ git branch -d dev
+
+22、删除后，查看branch，就只剩下master分支了：
+
+$ git branch
+
+23、Git鼓励大量使用分支：
+
+查看分支：git branch
+
+创建分支：git branch <name>
+
+切换分支：git checkout <name>
+
+创建+切换分支：git checkout -b <name>
+
+合并某分支到当前分支：git merge <name>
+
+删除分支：git branch -d <name>
