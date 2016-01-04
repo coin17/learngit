@@ -26,3 +26,10 @@ $ git reflog
 
 6、比较工作区和版本库里面最新版本差异
 $ git diff HEAD -- readme.txt
+
+7、撤销工作区修改
+$ git checkout -- readme.txt
+
+8、撤销暂存区内容，撤销工作区修改
+$ git reset HEAD readme.txt
+$ git checkout -- readme.txt
