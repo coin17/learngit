@@ -5,10 +5,21 @@ $ git config --global user.email "email@example.com"
 
 2、初始化及提交
 $ git init
-
 $ git add readme.txt
 $ git commit -m "wrote a readme file"
 
 3、查看工作区状态及查看修改
 $ git status
 $ git diff
+
+4、查看提交日志
+$ git log
+$ git log --pretty=oneline
+
+5、版本回退、查看所有记录
+$ git reset --hard HEAD^
+$ cat readme.txt
+
+$ git reset --hard 313128eead7
+
+$ git reflog
