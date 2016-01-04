@@ -23,3 +23,6 @@ $ cat readme.txt
 $ git reset --hard 313128eead7
 
 $ git reflog
+
+6、比较工作区和版本库里面最新版本差异
+$ git diff HEAD -- readme.txt
