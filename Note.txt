@@ -54,3 +54,20 @@ $ git push -u origin master
 
 15、本地提交后推送远程库最新修改
 $ git push origin master
+
+16、服务器克隆本地
+登陆GitHub，创建一个新的仓库，名字叫gitskills，勾选Initialize this repository with a README，这样GitHub会自动为我们创建一个README.md文件。
+
+$ git clone git@github.com:coin17/gitskills.git
+
+17、创建dev分支，切换到dev分支
+$ git checkout -b dev
+
+git checkout命令加上-b参数表示创建并切换，相当于以下两条命令：
+
+$ git branch dev
+$ git checkout dev
+
+18、用git branch命令查看当前分支：
+
+$ git branch
