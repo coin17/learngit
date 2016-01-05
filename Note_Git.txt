@@ -265,3 +265,7 @@ $ git push origin :refs/tags/v0.9
 访问项目主页https://github.com/twbs/bootstrap，点“Fork”就在自己的账号下克隆了一个bootstrap仓库，然后，从自己的账号下clone：
 
 git clone git@github.com:michaelliao/bootstrap.git
+
+29、忽略文件
+忽略某些文件时，需要编写.gitignore；
+.gitignore文件本身要放到版本库里，并且可以对.gitignore做版本管理！
