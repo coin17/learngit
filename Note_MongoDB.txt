@@ -16,6 +16,92 @@ mongod   --dbpath "D:\data\db"
 2、常用命令
 db --查看当前操作库
 use ABC --使用名为ABC的库
+show dbs --查看所有使用的库
+
+db.person.insert({"name":"Coin","age":28}) --插入
+
+var single={"name":"Coin","password":".*.","age":29}  --插入
+db.person.insert(single)
+
+db.person.update({"name":"Coin"},{"name":"Coin","age":29}) --整体更新
+
+var single=db.person.findOne({"name":"Coin"})  --整体更新
+single.age = 30
+db.person.update({"name":"Coin"},single)
+
+db.person.update({"name":"jack"},{$inc:{"age":30}})  --$inc 局部更新 如果有则自增$inc指定的值，如果没有则创建该值
+
+db.person.update({"name":"jack"},{$set:{"age":30}})  --$set 局部更新 设置指定值，如果没有则创建该值
+
+db.person.update({"name":"晃晃悠悠"},{$inc:{"age":17}},true)
+  --upsert操作 如果查询到及更新，未查询到则增加
+
+db.person.update({"name":"晃晃悠悠17%"},{$set:{"age":17}},true)
+  --upsert操作 如果查询到及更新，未查询到则增加
+
+db.person.update({"name":"Coin"},{$set:{"age":17}},true,true)  --更新操作默认更新第一条，全部更新需将第四个参数设置为true
+
+
+db.person.remove({"name":"Coin"})  --删除
+
+db.person.find() --查询所有
+
+db.person.find({"name":"Coin"}) --带条件查询
+
+db.person.find({"age":20}) --查询 =20
+
+db.person.find({"age":{$ne:20}}}) --查询 !=20
+
+db.person.find({"age":{$gt:20}}}) --查询 >20
+
+db.person.find({"age":{$gte:20}}}) --查询 >=20
+
+db.person.find({"age":{$lt:20}}}) --查询 !<20
+
+db.person.find({"age":{$lte:20}}}) --查询 <=20
+
+db.person.find({"name":"Coin","age":29}) --查询 and
+
+db.person.find({$or:[{"name":"Coin"},{"age":20}]}) --查询 or
+
+db.person.find({"name":{$in:["Coin","jack"]}}) --查询 in
+
+db.person.find({"name":{$nin:["Coin","jack"]}}) --查询 not in
+
+db.person.find({"name":/^j/}) --查询 正则匹配
+
+db.person.find({$where:function(){return this.name =='Coin'}}) --查询 where
+
+db.person.count()  --计数
+
+db.person.count({"age":17})  --计数
+
+db.person.distinct("name")   --去重
+
+db.person.group({
+	"key":{"age":true},
+	"initial":{"person":[]},
+	"$reduce":function(cur,prev){
+		prev.person.push(cur.name);
+	}
+})                
+--  分组
+
+db.person.group({
+	"key":{"age":true},
+	"initial":{"person":[]},
+	"reduce":function(doc,out){
+		out.person.push(doc.name);
+	},
+	"finalize":function(out){
+		out.count = out.person.length;
+	},
+	"condition":{"age":{$lt:25}}
+})                
+--  分组过滤
+
+备注：大小写敏感
+
 
 库名保留关键字
 admin： 从权限的角度来看，这是"root"数据库。要是将一个用户添加到这个数据库，这个用户自动继承所有数据库的权限。一些特定的服务器端命令也只能从这个数据库运行，比如列出所有的数据库或者关闭服务器。
