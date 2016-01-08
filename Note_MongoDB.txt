@@ -100,7 +100,54 @@ db.person.group({
 })                
 --  分组过滤
 
+function map(){
+	emit(this.name,{count:1});
+}
+function reduce(key,value){
+	var result = {count:0};
+	for(var i=0;i<value.length;i++){
+		result.count += value[i].count;
+	}
+	return result;
+}
+db.person.mapReduce(map,reduce,{"out":"collection"})
+
+-- mapReduce是一种编程模型，用在分布式计算中，其中有一个“map”函数，一个”reduce“函数。
+① map：
+          这个称为映射函数，里面会调用emit(key,value)，集合会按照你指定的key进行映射分组。
+② reduce：
+         这个称为简化函数，会对map分组后的数据进行分组简化，注意：在reduce(key,value)中的key就是
+
+      emit中的key，vlaue为emit分组后的emit(value)的集合，这里也就是很多{"count":1}的数组。
+③ mapReduce:
+          这个就是最后执行的函数了，参数为map，reduce和一些可选参数。
+
+db.collection.drop() --删除集合
+
+
+var list = db.person.find();
+list.forEach(function(x){
+	print(x.name);
+})		
+-- 游标
+
+var single=db.person.find().sort({"name":1}).skip(2).limit(2)
+single
+-- 分页
+
+
+db.person.remove({})      -- 删除全部
+
+for(var i=0;i<1000000;i++){
+	var rand=parseInt(i*Math.random());
+	db.person.insert({"name":"C_"+i,"age":i})
+}
+
+db.person.find({"name":"C_"+99999})  --约777ms
+
 备注：大小写敏感
+
+
 
 
 库名保留关键字
