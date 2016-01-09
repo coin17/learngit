@@ -150,11 +150,13 @@ db.person.ensureIndex({"name":1})  --建立索引
 
 db.person.getIndexs()  --查看当前集合中所有索引
 
---对比有无索引查询
+--对比有无索引查询速度
 db.person.find({"name":"C_"+99999})  -- 直接打开
 db.person.find({"age":99999})  -- 500ms以上
 
-db.person.ensureIndex({"name":1},{"unique":true})  --唯一索引
+db.person.dropIndex("name_1")
+
+db.person.ensureIndex({"name":1},{unique:true})  --唯一索引
 
 
 
