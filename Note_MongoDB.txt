@@ -14,6 +14,7 @@ cd \Program Files\MongoDB\Server\3.2\bin
 mongod   --dbpath "D:\data\db"
 
 2、常用命令
+mongo --命令行交互界面
 db --查看当前操作库
 use ABC --使用名为ABC的库
 show dbs --查看所有使用的库
@@ -143,7 +144,19 @@ for(var i=0;i<1000000;i++){
 	db.person.insert({"name":"C_"+i,"age":i})
 }
 
-db.person.find({"name":"C_"+99999})  --约777ms
+db.person.find({"name":"C_"+99999})  -- 500ms以上
+
+db.person.ensureIndex({"name":1})  --建立索引
+
+db.person.getIndexs()  --查看当前集合中所有索引
+
+--对比有无索引查询
+db.person.find({"name":"C_"+99999})  -- 直接打开
+db.person.find({"age":99999})  -- 500ms以上
+
+db.person.ensureIndex({"name":1},{"unique":true})  --唯一索引
+
+
 
 备注：大小写敏感
 
