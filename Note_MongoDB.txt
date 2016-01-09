@@ -4,7 +4,7 @@ mongod.exe --dbpath d:\data\db
 
 安装路径，C:\Program Files\MongoDB\Server\3.2\bin
 
-可制成批处理文件
+可制成批处理文件,默认端口27017
 
 @echo off 
 echo 准备启动 
@@ -12,6 +12,10 @@ echo 准备启动
 C:
 cd \Program Files\MongoDB\Server\3.2\bin
 mongod   --dbpath "D:\data\db"
+
+--auth 验证用户
+--master --主库
+
 
 2、常用命令
 mongo --命令行交互界面
@@ -139,30 +143,29 @@ single
 
 db.person.remove({})      -- 删除全部
 
-for(var i=0;i<1000000;i++){
+for(var i=0;i<100000;i++){
 	var rand=parseInt(i*Math.random());
 	db.person.insert({"name":"C_"+i,"age":i})
 }
 
 db.person.find({"name":"C_"+99999})  -- 500ms以上
 
-db.person.ensureIndex({"name":1})  --建立索引
+db.person.createIndex({"name":1})  --建立索引
 
-db.person.getIndexs()  --查看当前集合中所有索引
+db.person.getIndexes()  --查看当前集合中所有索引
 
 --对比有无索引查询速度
 db.person.find({"name":"C_"+99999})  -- 直接打开
 db.person.find({"age":99999})  -- 500ms以上
 
-db.person.dropIndex("name_1")
+db.person.dropIndex("name_1")  --删除名为 name_1 的索引
+db.person.dropIndexes()  --删除全部的索引
 
-db.person.ensureIndex({"name":1},{unique:true})  --唯一索引
+db.person.createIndex({"name":1},{'unique':true})  --唯一索引
 
-
+db.person.createIndex({"name":1,"age":1})
 
 备注：大小写敏感
-
-
 
 
 库名保留关键字
@@ -182,3 +185,33 @@ RDBMS			MongoDB
 数据库服务和客户端
 Mysqld/Oracle	mongod
 mysql/sqlplus	mongo
+
+******************************有疑问，登录，操作权限还没有学好
+安全性 
+use admin  -- admin库下操作用户
+添加管理员
+db.createUser( { "user" : "admin",
+                 "pwd": " admin",
+                 "customData" : { employeeId: 12345 },
+                 "roles" : [ { role: "clusterAdmin", db: "admin" },
+                             { role: "readAnyDatabase", db: "admin" },
+                             "readWrite"
+                             ] },
+               { w: "majority" , wtimeout: 5000 } )
+添加用户、角色
+db.createUser({
+	user:"sa",
+	pwd:"sa",
+	roles: [ "readWrite", "dbAdmin" ]
+})
+添加用户、角色
+db.createUser({
+	user:"k",
+	pwd:"k",
+	roles: [ ]
+})
+
+删除所有用户
+db.dropAllUsers()
+查看所有用户
+db.getUsers()
