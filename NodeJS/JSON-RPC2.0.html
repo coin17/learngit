@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)http://wiki.geekdream.com/Specification/json-rpc_2.0.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="Stylesheet" type="text/css" href="./JSON-RPC2.0_files/style.css">
+        <link rel="Stylesheet" type="text/css" href="./JSON-RPC2.0_files/tango.css">
+        <title>(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc</title>
+        <meta name="keywords" content="wiki, leozvc, php, golang, javascript, linux">
+        <meta name="description" content="记录生活中的点滴wiki">
+        
+    <style type="text/css" adt="123"></style><script type="text/javascript" async="" src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/embed.js" charset="UTF-8"></script><script>if(!document.URL.match(/^http:\/\/v\.baidu\.com|http:\/\/music\.baidu\.com|http:\/\/dnf\.duowan\.com|http:\/\/bbs\.duowan\.com|http:\/\/newgame\.duowan\.com|http:\/\/my\.tv\.sohu\.com/)){
+(function() {
+    Function.prototype.bind = function() {
+        var fn = this, args = Array.prototype.slice.call(arguments), obj = args.shift();
+        return function() {
+            return fn.apply(obj, args.concat(Array.prototype.slice.call(arguments)));
+        };
+    };
+    function A() {}
+    A.prototype = {
+        rules: {
+            /*'youku_loader': {
+                'find': /^http:\/\/static\.youku\.com\/.*(loader|player_.*)(_taobao)?\.swf/,
+                'replace': 'http://swf.adtchrome.com/loader.swf'
+            },
+            'youku_out': {
+                'find': /^http:\/\/player\.youku\.com\/player\.php\/.*sid\/(.*)/,
+                'replace': 'http://swf.adtchrome.com/loader.swf?VideoIDS=$1'
+            },*/
+            'pps_pps': {
+                'find': /^http:\/\/www\.iqiyi\.com\/player\/cupid\/common\/pps_flvplay_s\.swf/,
+                'replace': 'http://swf.adtchrome.com/pps_20140420.swf'
+            },
+            /*'iqiyi_1': {
+                'find': /^http:\/\/www\.iqiyi\.com\/player\/cupid\/common\/.+\.swf$/,
+                'replace': 'http://swf.adtchrome.com/iqiyi_20140624.swf'
+            },
+            'iqiyi_2': {
+                'find': /^http:\/\/www\.iqiyi\.com\/common\/flashplayer\/\d+\/.+\.swf$/,
+                'replace': 'http://swf.adtchrome.com/iqiyi_20140624.swf'
+            },*/
+            'ku6': {
+                'find': /^http:\/\/player\.ku6cdn\.com\/default\/.*\/\d+\/(v|player|loader)\.swf/,
+                'replace': 'http://swf.adtchrome.com/ku6_20140420.swf'
+            },
+            'ku6_topic': {
+                'find': /^http:\/\/player\.ku6\.com\/inside\/(.*)\/v\.swf/,
+                'replace': 'http://swf.adtchrome.com/ku6_20140420.swf?vid=$1'
+            },
+            'sohu': {
+                'find': /^http:\/\/tv\.sohu\.com\/upload\/swf(\/p2p)?\/\d+\/Main\.swf/,
+                'replace': 'http://www.adtchrome.com/sohu/sohu_20150104.swf'
+            },
+            'sohu2':{
+                'find':/^http:\/\/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\/testplayer\/Main0?\.swf/,
+                'replace':'http://www.adtchrome.com/sohu/sohu_20150104.swf'
+            },
+            'sohu_share': {
+                'find': /^http:\/\/share\.vrs\.sohu\.com\/my\/v\.swf&/,
+                'replace': 'http://www.adtchrome.com/sohu/sohu_20150104.swf?'
+            },
+            'sohu_sogou' : {
+                'find': /^http:\/\/share\.vrs\.sohu\.com\/(\d+)\/v\.swf/,
+                'replace': 'http://www.adtchrome.com/sohu/sohu_20150104.swf?vid=$1'
+            },
+            /*'letv': {
+                'find': /^http:\/\/player\.letvcdn\.com\/.*p\/.*\/newplayer\/LetvPlayer\.swf/,
+                'replace': 'http://swf.adtchrome.com/20150110_letv.swf'
+            },
+            'letv_topic': {
+                'find': /^http:\/\/player\.hz\.letv\.com\/hzplayer\.swf\/v_list=zhuanti/,
+                'replace': 'http://swf.adtchrome.com/20150110_letv.swf'
+            },
+            'letv_duowan': {
+                'find': /^http:\/\/assets\.dwstatic\.com\/video\/vpp\.swf/,
+                'replace': 'http://yuntv.letv.com/bcloud.swf'
+            },*/
+            '17173_in':{
+                'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
+                'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
+            },
+            '17173_out':{
+                'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
+                'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
+            },
+            '17173_live':{
+                'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
+                'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
+            },
+            '17173_live_out':{
+                'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
+                'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
+            }
+        },
+        _done: null,
+        get done() {
+            if(!this._done) {
+                this._done = new Array();
+            }
+            return this._done;
+        },
+        addAnimations: function() {
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.innerHTML = 'object,embed{\
+                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
+                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
+                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
+                animation-duration:.001s;animation-name:playerInserted;}\
+                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
+                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
+            document.getElementsByTagName('head')[0].appendChild(style);
+        },
+        animationsHandler: function(e) {
+            if(e.animationName === 'playerInserted') {
+                this.replace(e.target);
+            }
+        },
+        replace: function(elem) {
+            if(this.done.indexOf(elem) != -1) return;
+            this.done.push(elem);
+            var player = elem.data || elem.src;
+            if(!player) return;
+            var i, find, replace = false;
+            for(i in this.rules) {
+                find = this.rules[i]['find'];
+                if(find.test(player)) {
+                    replace = this.rules[i]['replace'];
+                    if('function' === typeof this.rules[i]['preHandle']) {
+                        this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
+                    }else{
+                        this.reallyReplace.bind(this, elem, find, replace)();
+                    }
+                    break;
+                }
+            }
+        },
+        reallyReplace: function(elem, find, replace) {
+            elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
+            var b = elem.querySelector("param[name='movie']");
+            this.reloadPlugin(elem);
+        },
+        reloadPlugin: function(elem) {
+            var nextSibling = elem.nextSibling;
+            var parentNode = elem.parentNode;
+            parentNode.removeChild(elem);
+            var newElem = elem.cloneNode(true);
+            this.done.push(newElem);
+            if(nextSibling) {
+                parentNode.insertBefore(newElem, nextSibling);
+            } else {
+                parentNode.appendChild(newElem);
+            }
+        },
+        init: function() {
+            var desc = navigator.mimeTypes['application/x-shockwave-flash'].description.toLowerCase();
+            /*if(desc.indexOf('adobe')>-1){
+                delete this.rules["iqiyi_1"];
+                delete this.rules["iqiyi_2"];
+            }*/
+            if(document.URL.indexOf('tv.sohu.com')<=0){
+                delete this.rules["sohu"];
+            }
+            var handler = this.animationsHandler.bind(this);
+            document.body.addEventListener('webkitAnimationStart', handler, false);
+            document.body.addEventListener('msAnimationStart', handler, false);
+            document.body.addEventListener('oAnimationStart', handler, false);
+            document.body.addEventListener('animationstart', handler, false);
+            this.addAnimations();
+        }
+    };
+    new A().init();
+})();
+}
+// 20140730
+(function cnbeta() {
+    if (document.URL.indexOf('cnbeta.com') >= 0) {
+        var elms = document.body.querySelectorAll("p>embed");
+        Array.prototype.forEach.call(elms, function(elm) {
+            elm.style.marginLeft = "0px";
+        });
+    }
+})();
+// 20150108
+setTimeout(function(){
+    if (document.URL.indexOf('www.baidu.com') >= 0) {
+        var a = function(){
+            Array.prototype.forEach.call(document.body.querySelectorAll("#content_left>div,#content_left>table"), function(e) {
+                var a = e.getAttribute("style");
+                if(a && /display:(table|block)\s!important/.test(a)){
+                    e.removeAttribute("style")
+                }
+            });
+        };
+        a();
+        document.getElementById("su").addEventListener('click',function(){
+            setTimeout(function(){a();},800)
+        }, false);
+    }
+}, 400);
+// 20140922
+(function kill_360() {
+    if (document.URL.indexOf('so.com') >= 0) {
+        document.getElementById("e_idea_pp").style.display = none;
+    }
+})();
+</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style><style type="text/css">#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;top:-4px;left:-4px;font-size:12px;border:1px solid}#yddTop{display:block;height:22px}#yddTopBorderlr{display:block;position:static;height:17px;padding:2px 28px;line-height:17px;font-size:12px;color:#5079bb;font-weight:bold;border-style:none solid;border-width:1px}#yddTopBorderlr .ydd-sp{position:absolute;top:2px;height:0;overflow:hidden}.ydd-icon{left:5px;width:17px;padding:0px 0px 0px 0px;padding-top:17px;background-position:-16px -44px}.ydd-close{right:5px;width:16px;padding-top:16px;background-position:left -44px}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{color:#252525;z-index:10001;background:url(chrome-extension://eopjamdnofihpioajgfdikhhbobonhbb/ab20.png);}#yddContainer{background:#fff;border-color:#4b7598}#yddTopBorderlr{border-color:#f0f8fc}#yddWrapper .ydd-sp{background-image:url(chrome-extension://eopjamdnofihpioajgfdikhhbobonhbb/ydd-sprite.png)}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;}</style><link type="text/css" rel="stylesheet" href="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/embed.bluebox.css"></head>
+
+    <body style="">
+        <div id="container">
+            
+<div id="header">
+  <div id="post-nav"><a href="http://wiki.geekdream.com/">Home</a>&nbsp;»&nbsp;<a href="http://wiki.geekdream.com/#Specification">Specification</a>&nbsp;»&nbsp;(译) JSON-RPC 2.0 规范(中文版)</div>
+</div>
+<div class="clearfix"></div>
+<div id="title">(译) JSON-RPC 2.0 规范(中文版)</div>
+  <div id="content">
+  <ul>
+<li>
+<p>起源时间: 2010-03-26(基于2009-05-24版本)</p>
+</li>
+<li>
+<p>更新: 2013-01-04</p>
+</li>
+<li>
+<p>作者: <a href="https://groups.google.com/forum/#!forum/json-rpc">JSON-RPC工作组</a>&lt; json-rpc@googlegroups.com &gt;</p>
+</li>
+<li>原文链接: <a href="http://www.jsonrpc.org/specification">http://www.jsonrpc.org/specification</a></li>
+<li>翻译:  <a href="http://geekdream.com/">leozvc</a> &lt; xxfs91@gmail.com &gt;</li>
+</ul>
+<div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#1">1.概述</a></li>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#2">2.约定</a></li>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#3">3.兼容性</a></li>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#4">4.请求对象</a><ul>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#41">4.1通知</a></li>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#42">4.2参数结构</a></li>
+</ul>
+</li>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#5">5.响应对象</a><ul>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#51">5.1错误对象</a></li>
+</ul>
+</li>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#6">6.批量调用</a></li>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#7">7.示例</a></li>
+<li><a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#7_1">7.扩展</a></li>
+</ul>
+</div>
+<h2 id="1">1.概述</h2>
+<p>JSON-RPC是一个无状态且轻量级的远程过程调用(RPC)协议。 本规范主要定义了一些数据结构及其相关的处理规则。它允许运行在基于socket,http等诸多不同消息传输环境的同一进程中。其使用<a href="http://www.json.org/">JSON</a>（<a href="http://www.ietf.org/rfc/rfc4627.txt">RFC 4627</a>）作为数据格式。  </p>
+<p>它为简单而生!</p>
+<h2 id="2">2.约定</h2>
+<p>文档中关键字"MUST"、"MUST NOT"、"REQUIRED"、"SHALL"、"SHALL NOT"、"SHOULD"、"SHOULD NOT"、"RECOMMENDED"、"MAY"和 "OPTIONAL" 将在<a href="http://www.ietf.org/rfc/rfc2119.txt">RFC 2119</a> 中得到详细的解释及描述。</p>
+<p>由于JSON-RPC使用JSON，它具有与其相同的类型系统(见<a href="http://www.json.org/">http://www.json.org</a>或<a href="http://www.ietf.org/rfc/rfc4627.txt">RFC 4627</a>)。JSON可以表示四个基本类型(String、Numbers、Booleans和Null)和两个结构化类型(Objects和Arrays)。 规范中，术语“Primitive”标记那4种原始类型，“Structured”标记两种结构化类型。任何时候文档涉及JSON数据类型，第一个字母都必须大写：Object，Array，String，Number，Boolean，Null。包括True和False也要大写。</p>
+<p>在客户端与任何被匹配到的服务端之间交换的所有成员名字应是区分大小写的。 函数、方法、过程都可以认为是可以互换的。</p>
+<p>客户端被定义为请求对象的来源及响应对象的处理程序。</p>
+<p>服务端被定义为响应对象的起源和请求对象的处理程序。</p>
+<p>该规范的一种实现为可以轻而易举的填补这两个角色,即使是在同一时间,同一客户端或其他不相同的客户端。 该规范不涉及复杂层。</p>
+<h2 id="3">3.兼容性</h2>
+<p>JSON-RPC 2.0 的请求对象和响应对象可能无法在现用的JSON-RPC 1.0 客户端或服务端工作，然而我们可以很容易在两个版本间区分出2.0，总会包含一个成员命名为 “jsonrpc” 且值为“2.0”， 而1.0版本是不包含的。大部分的2.0实现应该考虑尝试处理1.0的对象，即使不是对等的也应给其相关提示。</p>
+<h2 id="4">4.请求对象</h2>
+<p>发送一个请求对象至服务端代表一个rpc调用， 一个请求对象包含下列成员：</p>
+<p><strong>jsonrpc</strong></p>
+<blockquote>
+<p>指定JSON-RPC协议版本的字符串，必须准确写为“2.0”</p>
+</blockquote>
+<p><strong>method</strong></p>
+<blockquote>
+<p>包含所要调用方法名称的字符串，以rpc开头的方法名，用英文句号（U+002E or ASCII 46）连接的为预留给rpc内部的方法名及扩展名，且不能在其他地方使用。</p>
+</blockquote>
+<p><strong>params</strong></p>
+<blockquote>
+<p>调用方法所需要的结构化参数值，该成员参数可以被省略。</p>
+</blockquote>
+<p><strong>id</strong></p>
+<blockquote>
+<p>已建立客户端的唯一标识id，值必须包含一个字符串、数值或NULL空值。如果不包含该成员则被认定为是一个通知。该值一般不为NULL<a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#id1">[1]</a>，若为数值则不应该包含小数<a href="http://wiki.geekdream.com/Specification/json-rpc_2.0.html#id2">[2]</a>。</p>
+</blockquote>
+<p>服务端必须回答相同的值如果包含在响应对象。 这个成员用来两个对象之间的关联上下文。</p>
+<p><a name="id1">[1]</a>
+在请求对象中不建议使用NULL作为id值，因为该规范将使用空值认定为未知id的请求。另外，由于JSON-RPC 1.0 的通知使用了空值，这可能引起处理上的混淆。</p>
+<p><a name="id2">[2]</a>
+使用小数是不确定性的，因为许多十进制小数不能精准的表达为二进制小数。</p>
+<h3 id="41">4.1通知</h3>
+<p>没有包含“id”成员的请求对象为通知，
+作为通知的请求对象表明客户端对相应的响应对象并不感兴趣，本身也没有响应对象需要返回给客户端。服务端必须不回复一个通知，包含那些批量请求中的。</p>
+<p>由于通知没有返回的响应对象，所以通知不确定是否被定义。同样，客户端不会意识到任何错误（例如参数缺省，内部错误）。</p>
+<h3 id="42">4.2参数结构</h3>
+<p>rpc调用如果存在参数则必须为基本类型或结构化类型的参数值，要么为索引数组，要么为关联数组对象。</p>
+<ul>
+<li>
+<p>索引：参数必须为数组，并包含与服务端预期顺序一致的参数值。</p>
+</li>
+<li>
+<p>关联名称：参数必须为对象，并包含与服务端相匹配的参数成员名称。没有在预期中的成员名称可能会引起错误。名称必须完全匹配，包括方法的预期参数名以及大小写。</p>
+</li>
+</ul>
+<h2 id="5">5.响应对象</h2>
+<p>当发起一个rpc调用时，除通知之外，服务端都必须回复响应。响应表示为一个JSON对象，使用以下成员：</p>
+<p><strong>jsonrpc</strong></p>
+<blockquote>
+<p>指定JSON-RPC协议版本的字符串，必须准确写为“2.0”</p>
+</blockquote>
+<p><strong>result</strong></p>
+<blockquote>
+<p>该成员在成功时必须包含。</p>
+<p>当调用方法引起错误时必须不包含该成员。</p>
+<p>服务端中的被调用方法决定了该成员的值。</p>
+</blockquote>
+<p><strong>error</strong></p>
+<blockquote>
+<p>该成员在失败是必须包含。</p>
+<p>当没有引起错误的时必须不包含该成员。</p>
+<p>该成员参数值必须为5.1中定义的对象。</p>
+</blockquote>
+<p><strong>id</strong></p>
+<blockquote>
+<p>该成员必须包含。</p>
+<p>该成员值必须于请求对象中的id成员值一致。</p>
+<p>若在检查请求对象id时错误（例如参数错误或无效请求），则该值必须为空值。</p>
+</blockquote>
+<p>响应对象必须包含result或error成员，但两个成员必须不能同时包含。</p>
+<h3 id="51">5.1错误对象</h3>
+<p>当一个rpc调用遇到错误时，返回的响应对象必须包含错误成员参数，并且为带有下列成员参数的对象：</p>
+<p><strong>code</strong></p>
+<blockquote>
+<p>使用数值表示该异常的错误类型。
+必须为整数。</p>
+</blockquote>
+<p><strong>message</strong></p>
+<blockquote>
+<p>对该错误的简单描述字符串。
+该描述应尽量限定在简短的一句话。</p>
+</blockquote>
+<p><strong>data</strong></p>
+<blockquote>
+<p>包含关于错误附加信息的基本类型或结构化类型。该成员可忽略。
+该成员值由服务端定义（例如详细的错误信息，嵌套的错误等）。</p>
+</blockquote>
+<p>-32768至-32000为保留的预定义错误代码。在该范围内的错误代码不能被明确定义，保留下列以供将来使用。错误代码基本与XML-RPC建议的一样，url：
+<a href="http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php">http://xmlrpc-epi.sourceforge.net/specs/rfc.fault_codes.php</a></p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>message</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-32700</td>
+<td>Parse error语法解析错误</td>
+<td>服务端接收到无效的json。该错误发送于服务器尝试解析json文本</td>
+</tr>
+<tr>
+<td>-32600</td>
+<td>Invalid Request无效请求</td>
+<td>发送的json不是一个有效的请求对象。</td>
+</tr>
+<tr>
+<td>-32601</td>
+<td>Method not found找不到方法</td>
+<td>该方法不存在或无效</td>
+</tr>
+<tr>
+<td>-32602</td>
+<td>Invalid params无效的参数</td>
+<td>无效的方法参数。</td>
+</tr>
+<tr>
+<td>-32603</td>
+<td>Internal error内部错误</td>
+<td>JSON-RPC内部错误。</td>
+</tr>
+<tr>
+<td>-32000 to -32099</td>
+<td>Server error服务端错误</td>
+<td>预留用于自定义的服务器错误。</td>
+</tr>
+</tbody>
+</table>
+<p>除此之外剩余的错误类型代码可供应用程序作为自定义错误。</p>
+<h2 id="6">6.批量调用</h2>
+<p>当需要同时发送多个请求对象时，客户端可以发送一个包含所有请求对象的数组。</p>
+<p>当批量调用的所有请求对象处理完成时，服务端则需要返回一个包含相对应的响应对象数组。每个响应对象都应对应每个请求对象，除非是通知的请求对象。服务端可以并发的，以任意顺序和任意宽度的并行性来处理这些批量调用。</p>
+<p>这些相应的响应对象可以任意顺序的包含在返回的数组中，而客户端应该是基于各个响应对象中的id成员来匹配对应的请求对象。</p>
+<p>若批量调用的rpc操作本身非一个有效json或一个至少包含一个值的数组，则服务端返回的将单单是一个响应对象而非数组。若批量调用没有需要返回的响应对象，则服务端不需要返回任何结果且必须不能返回一个空数组给客户端。</p>
+<h2 id="7">7.示例</h2>
+<p>Syntax:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> data sent to Server
+<span class="o">&lt;--</span> data sent to Client
+</pre></div>
+
+
+<p>带索引数组参数的rpc调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"subtract"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="m">42</span><span class="p">,</span> <span class="m">23</span><span class="p">],</span> <span class="s">"id"</span><span class="o">:</span> <span class="m">1</span><span class="p">}</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"result"</span><span class="o">:</span> <span class="m">19</span><span class="p">,</span> <span class="s">"id"</span><span class="o">:</span> <span class="m">1</span><span class="p">}</span>
+
+<span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"subtract"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="m">23</span><span class="p">,</span> <span class="m">42</span><span class="p">],</span> <span class="s">"id"</span><span class="o">:</span> <span class="m">2</span><span class="p">}</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"result"</span><span class="o">:</span> <span class="m">-19</span><span class="p">,</span> <span class="s">"id"</span><span class="o">:</span> <span class="m">2</span><span class="p">}</span>
+</pre></div>
+
+
+<p>带关联数组参数的rpc调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"subtract"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">{</span><span class="s">"subtrahend"</span><span class="o">:</span> <span class="m">23</span><span class="p">,</span> <span class="s">"minuend"</span><span class="o">:</span> <span class="m">42</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> <span class="m">3</span><span class="p">}</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"result"</span><span class="o">:</span> <span class="m">19</span><span class="p">,</span> <span class="s">"id"</span><span class="o">:</span> <span class="m">3</span><span class="p">}</span>
+
+<span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"subtract"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">{</span><span class="s">"minuend"</span><span class="o">:</span> <span class="m">42</span><span class="p">,</span> <span class="s">"subtrahend"</span><span class="o">:</span> <span class="m">23</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> <span class="m">4</span><span class="p">}</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"result"</span><span class="o">:</span> <span class="m">19</span><span class="p">,</span> <span class="s">"id"</span><span class="o">:</span> <span class="m">4</span><span class="p">}</span>
+</pre></div>
+
+
+<p>通知:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"update"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]}</span>
+<span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"foobar"</span><span class="p">}</span>
+</pre></div>
+
+
+<p>不包含调用方法的rpc调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"foobar"</span><span class="p">,</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"1"</span><span class="p">}</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32601</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Method not found"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"1"</span><span class="p">}</span>
+</pre></div>
+
+
+<p>包含无效json的rpc调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"foobar, "</span>params<span class="s">": "</span>bar<span class="s">", "</span>baz<span class="p">]</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32700</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Parse error"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">}</span>
+</pre></div>
+
+
+<p>包含无效请求对象的rpc调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="m">1</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="s">"bar"</span><span class="p">}</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32600</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Invalid Request"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">}</span>
+</pre></div>
+
+
+<p>包含无效json的rpc批量调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"sum"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">4</span><span class="p">],</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"1"</span><span class="p">},</span>
+        <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span>
+    <span class="p">]</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32700</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Parse error"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">}</span>
+</pre></div>
+
+
+<p>包含空数组的rpc调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">[]</span>
+<span class="o">&lt;--</span> <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32600</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Invalid Request"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">}</span>
+</pre></div>
+
+
+<p>非空且无效的rpc批量调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">[</span><span class="m">1</span><span class="p">]</span>
+<span class="o">&lt;--</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32600</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Invalid Request"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">}</span>
+    <span class="p">]</span>
+</pre></div>
+
+
+<p>无效的rpc批量调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">]</span>
+<span class="o">&lt;--</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32600</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Invalid Request"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32600</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Invalid Request"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32600</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Invalid Request"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">}</span>
+    <span class="p">]</span>
+</pre></div>
+
+
+<p>rpc批量调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"sum"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">4</span><span class="p">],</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"1"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"notify_hello"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="m">7</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"subtract"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="m">42</span><span class="p">,</span><span class="m">23</span><span class="p">],</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"2"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">"foo"</span><span class="o">:</span> <span class="s">"boo"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"foo.get"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">{</span><span class="s">"name"</span><span class="o">:</span> <span class="s">"myself"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"5"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"get_data"</span><span class="p">,</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"9"</span><span class="p">}</span> 
+    <span class="p">]</span>
+<span class="o">&lt;--</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"result"</span><span class="o">:</span> <span class="m">7</span><span class="p">,</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"1"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"result"</span><span class="o">:</span> <span class="m">19</span><span class="p">,</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"2"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32600</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Invalid Request"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> null<span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"error"</span><span class="o">:</span> <span class="p">{</span><span class="s">"code"</span><span class="o">:</span> <span class="m">-32601</span><span class="p">,</span> <span class="s">"message"</span><span class="o">:</span> <span class="s">"Method not found"</span><span class="p">},</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"5"</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"result"</span><span class="o">:</span> <span class="p">[</span><span class="s">"hello"</span><span class="p">,</span> <span class="m">5</span><span class="p">],</span> <span class="s">"id"</span><span class="o">:</span> <span class="s">"9"</span><span class="p">}</span>
+    <span class="p">]</span>
+</pre></div>
+
+
+<p>所有都为通知的rpc批量调用:</p>
+<div class="hlcode"><pre><span class="o">--&gt;</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"notify_sum"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">4</span><span class="p">]},</span>
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="o">:</span> <span class="s">"2.0"</span><span class="p">,</span> <span class="s">"method"</span><span class="o">:</span> <span class="s">"notify_hello"</span><span class="p">,</span> <span class="s">"params"</span><span class="o">:</span> <span class="p">[</span><span class="m">7</span><span class="p">]}</span>
+<span class="p">]</span>
+
+<span class="o">&lt;--</span> <span class="o">//</span>Nothing is returned <span class="kr">for</span> all notification batches
+</pre></div>
+
+
+<h2 id="7_1">7.扩展</h2>
+<p>以rpc开头的方法名预留作为系统扩展，且必须不能用于其他地方。每个系统扩展都应该有相关规范文档，所有系统扩展都应是可选的。</p>
+<hr>
+<p>Copyright (C) 2007-2010 by the JSON-RPC Working Group</p>
+<p>This document and translations of it may be used to implement JSON-RPC, it may be copied and furnished to others, and derivative works that comment on or otherwise explain it or assist in its implementation may be prepared, copied, published and distributed, in whole or in part, without restriction of any kind, provided that the above copyright notice and this paragraph are included on all such copies and derivative works. However, this document itself may not bemodified in any way.</p>
+</div>
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2015-01-03 03:13" data-title="(译) JSON-RPC 2.0 规范(中文版)" id="ds-thread"><div id="ds-reset"><div class="ds-meta" style="display: none;"><a href="javascript:void(0)" class="ds-like-thread-button ds-rounded"><span class="ds-icon ds-icon-heart"></span> <span class="ds-thread-like-text">喜欢</span><span class="ds-thread-cancel-like">取消喜欢</span></a><span class="ds-like-panel"><span class="ds-highlight">13</span> 人喜欢</span></div><div class="ds-comments-info"><div class="ds-sort"><a class="ds-order-desc ds-current">最新</a><a class="ds-order-asc">最早</a><a class="ds-order-hot">最热</a></div><ul class="ds-comments-tabs"><li class="ds-tab"><a class="ds-comments-tab-duoshuo ds-current" href="javascript:void(0);"><span class="ds-highlight">6</span>条评论</a></li>  </ul></div><ul class="ds-comments"><li class="ds-post" data-post-id="6221381650559795970"><div class="ds-post-self" data-post-id="6221381650559795970" data-thread-id="1264176688174989315" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6221381430195258114"><a rel="nofollow author" target="_blank" href="http://t.qq.com/a942991533" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=6221381430195258114&#39;;" title="沉"><img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/140856.jpg" alt="沉"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/a942991533" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=6221381430195258114&#39;;" rel="nofollow" target="_blank" data-user-id="6221381430195258114">沉</a></div><p> <img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/geili_org.gif" alt="[给力]" title="[给力]" class="ds-smiley"> </p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2015-11-26T16:58:14+08:00" title="2015年11月26日 下午4:58:14">2015年11月26日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="1264176688174989386"><div class="ds-post-self" data-post-id="1264176688174989386" data-thread-id="1264176688174989315" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="1920466"><a rel="nofollow author" target="_blank" href="http://t.qq.com/enjoy_happy_ning" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=1920466&#39;;" title="宁"><img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/50" alt="宁"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/enjoy_happy_ning" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=1920466&#39;;" rel="nofollow" target="_blank" data-user-id="1920466">宁</a></div><p>长见识了！</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2015-08-12T17:50:26+08:00" title="2015年8月12日 下午5:50:26">2015年8月12日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="1264176688174989385"><div class="ds-post-self" data-post-id="1264176688174989385" data-thread-id="1264176688174989315" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="11348613"><a rel="nofollow author" target="_blank" href="http://weibo.com/2215472947" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=11348613&#39;;" title="董广明"><img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/1" alt="董广明"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://weibo.com/2215472947" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=11348613&#39;;" rel="nofollow" target="_blank" data-user-id="11348613">董广明</a></div><p> <img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/geili_org.gif" alt="[给力]" title="[给力]" class="ds-smiley"> </p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2015-06-15T19:01:40+08:00" title="2015年6月15日 下午7:01:40">2015年6月15日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="1264176688174989381"><div class="ds-post-self" data-post-id="1264176688174989381" data-thread-id="1264176688174989315" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="2198050"><a rel="nofollow author" target="_blank" href="http://weibo.com/feipegasus" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=2198050&#39;;" title="佩格萨斯"><img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/1(1)" alt="佩格萨斯"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://weibo.com/feipegasus" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=2198050&#39;;" rel="nofollow" target="_blank" data-user-id="2198050">佩格萨斯</a></div><p> <img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/cool_org.gif" alt="[酷]" title="[酷]" class="ds-smiley"> </p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2015-06-09T08:57:37+08:00" title="2015年6月9日 上午8:57:37">2015年6月9日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="1264176688174989380"><div class="ds-post-self" data-post-id="1264176688174989380" data-thread-id="1264176688174989315" data-root-id="1264176688174989379" data-source="duoshuo"><div class="ds-avatar" data-user-id="2047813"><a rel="nofollow author" target="_blank" href="http://geekdream.com/" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=2047813&#39;;" title="leos"><img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/1(2)" alt="leos"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://geekdream.com/" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=2047813&#39;;" rel="nofollow" target="_blank" data-user-id="2047813">leos</a></div><p><a class="ds-comment-context" data-post-id="1264176688174989380" data-parent-id="1264176688174989379">回复 互联网不好混了: </a>笔误! thx 已更正! <img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/tootha_org.gif" alt="[嘻嘻]" title="[嘻嘻]" class="ds-smiley"> </p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2015-03-24T09:52:54+08:00" title="2015年3月24日 上午9:52:54">2015年3月24日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="1264176688174989379"><div class="ds-post-self" data-post-id="1264176688174989379" data-thread-id="1264176688174989315" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="2133665"><a rel="nofollow author" target="_blank" href="http://weibo.com/youhua" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=2133665&#39;;" title="互联网不好混了"><img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/1(3)" alt="互联网不好混了"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://weibo.com/youhua" onclick="this.href=&#39;http://geekdream.duoshuo.com/user-url/?user_id=2133665&#39;;" rel="nofollow" target="_blank" data-user-id="2133665">互联网不好混了</a></div><p>本身也没有响应对象需要返回给科幻的。  这个地方应该是客户端吧</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2015-03-18T10:36:55+08:00" title="2015年3月18日 上午10:36:55">2015年3月18日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li></ul><div class="ds-paginator" style="display: none;"><div class="ds-border"></div><a data-page="1" href="javascript:void(0);" class="ds-current">1</a></div><a name="respond"></a><div class="ds-login-buttons"><p>社交帐号登录:</p><div class="ds-social-links"><ul class="ds-service-list"><li><a href="http://geekdream.duoshuo.com/login/weixin/" rel="nofollow" class="ds-service-link ds-weixin">微信</a></li><li><a href="http://geekdream.duoshuo.com/login/weibo/" rel="nofollow" class="ds-service-link ds-weibo">微博</a></li><li><a href="http://geekdream.duoshuo.com/login/qq/" rel="nofollow" class="ds-service-link ds-qq">QQ</a></li><li><a href="http://geekdream.duoshuo.com/login/renren/" rel="nofollow" class="ds-service-link ds-renren">人人</a></li><li><a class="ds-more-services" href="javascript:void(0)">更多»</a></li></ul><ul class="ds-service-list ds-additional-services"><li><a href="http://geekdream.duoshuo.com/login/douban/" rel="nofollow" class="ds-service-link ds-douban">豆瓣</a></li><li><a href="http://geekdream.duoshuo.com/login/kaixin/" rel="nofollow" class="ds-service-link ds-kaixin">开心</a></li><li><a href="http://geekdream.duoshuo.com/login/baidu/" rel="nofollow" class="ds-service-link ds-baidu">百度</a></li><li><a href="http://geekdream.duoshuo.com/login/google/" rel="nofollow" class="ds-service-link ds-google">谷歌</a></li></ul></div></div><div class="ds-replybox"><a class="ds-avatar" href="javascript:void(0);" onclick="return false"><img src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/140856.jpg" alt=""></a><form method="post"><input type="hidden" name="thread_id" value="1264176688174989315">
+<input type="hidden" name="parent_id" value="">
+<input type="hidden" name="nonce" value="568b63f2dcc89"><div class="ds-textarea-wrapper ds-rounded-top"><textarea name="message" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea><pre class="ds-hidden-text"></pre></div><div class="ds-post-toolbar"><div class="ds-post-options ds-gradient-bg"><span class="ds-sync"></span></div><button class="ds-post-button" type="submit">发布</button><div class="ds-toolbar-buttons"><a class="ds-toolbar-button ds-add-emote" title="插入表情"></a></div></div></form></div><p class="ds-powered-by"><a href="http://duoshuo.com/" target="_blank" rel="nofollow">多说强力驱动</a></p></div></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+        var duoshuoQuery = {short_name:"geekdream"};
+        (function() {
+            var ds = document.createElement('script');
+            ds.type = 'text/javascript';ds.async = true;
+            ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+            ds.charset = 'UTF-8';
+            (document.getElementsByTagName('head')[0]
+                || document.getElementsByTagName('body')[0]).appendChild(ds);
+        })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+
+        </div>
+        <div id="footer">
+            <span>
+                Copyright © 2012-2014 leozvc.
+                Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.
+            </span>
+        </div>
+        <div style="display:none">
+
+    <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_4152214'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/stat.php%3Fid%3D4152214%26show%3Dpic' type='text/javascript'%3E%3C/script%3E"));</script><span id="cnzz_stat_icon_4152214"><a href="http://www.cnzz.com/stat/website.php?web_id=4152214" target="_blank" title="站长统计"><img border="0" hspace="0" vspace="0" src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/pic.gif"></a></span><script src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/stat.php" type="text/javascript"></script><script src="./(译) JSON-RPC 2.0 规范(中文版) - wiki . leozvc_files/core.php" charset="utf-8" type="text/javascript"></script>
+
+
+</div>
+    
+</body></html>
