@@ -324,3 +324,10 @@ arr.join('-'); // 'A-B-C-1-2-3'
 
 var arr = [[1, 2, 3], [400, 500, 600], '-'];
 上述Array包含3个元素，其中头两个元素本身也是Array。
+
+'use strict';
+var arr = ['小明', '小红', '大军', '阿黄'];
+排序后显示：欢迎XXX，XXX，XXX和XXX同学！：
+
+arr.sort();
+alert("欢迎"+arr.slice(0,arr.length-1).join(',')+"和"+arr.pop()+"同学！");
