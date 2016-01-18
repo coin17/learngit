@@ -215,3 +215,6 @@ db.createUser({
 db.dropAllUsers()
 查看所有用户
 db.getUsers()
+
+use admin  -- admin库下操作用户
+db.auth('sa','sa')

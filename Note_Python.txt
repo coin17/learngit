@@ -1,0 +1,4 @@
+
+python内置的一个简单的http server，方便别人用浏览器来访问你的文件目录
+
+python -m SimpleHTTPServer 80
