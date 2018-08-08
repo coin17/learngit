@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+</head>
+<body>
+    <div id="app">
+        原始setTimeout：{{oldRefreshTime}}
+        <br /><br />
+        初次打开时间：{{startTime}}
+        <br /><br />
+        切换Tab时间：{{endTime}}
+        <br /><br />
+        修改后：{{ newRefreshTime }}
+    </div>
+    <script src="vue.js"></script>
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                oldRefreshTime: 100,
+                startTime: new Date(),
+                endTime: new Date()
+            },
+            computed: {
+                // 计算属性的 getter
+                newRefreshTime: function () {
+                    if (parseInt((this.endTime - this.startTime) / 1000) >= 100)
+                    {
+                        this.startTime = new Date();
+                        return 0;
+                    }
+                    return 100 - parseInt((new Date() - this.startTime) / 1000)
+                }
+            }
+        })
+        MainRefreshData()
+        function MainRefreshData() {
+            if (app.newRefreshTime == 0) {
+                //清空自动刷新，防止越来越快
+                clearTimeout(refreshD);
+                app.oldRefreshTime = 100;
+            }
+            refreshD = setTimeout(function () {
+                app.oldRefreshTime--;
+                //触发计算属性
+                app.endTime = new Date();
+                MainRefreshData();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
